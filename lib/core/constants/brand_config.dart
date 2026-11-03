@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 /// Everything you change to personalise the demo for a lead (30 to 60 minutes):
 /// name, initials, colours, branch address. Products come from assets/data/products.json,
-/// photos from assets/images/products/<productId>.jpg.
+/// photos from assets/images/products/`<productId>`.jpg.
 class BrandConfig {
   BrandConfig._();
 

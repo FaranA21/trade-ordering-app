@@ -5,7 +5,7 @@ import 'package:merchant_demo/data/models/product.dart';
 
 /// Product photo. Order of preference:
 /// 1. Unsplash URL from products.json (hotlinked, as Unsplash's terms require)
-/// 2. Local file assets/images/products/<productId>.jpg
+/// 2. Local file assets/images/products/`<productId>`.jpg
 /// 3. A category icon
 class ProductImage extends StatelessWidget {
   const ProductImage({

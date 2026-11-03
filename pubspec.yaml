@@ -1,0 +1,35 @@
+name: merchant_demo
+description: Demo B2B trade ordering app and admin panel (Nexvorge concept, not client work).
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+  flutter_bloc: ^9.1.1
+  equatable: ^2.0.7
+  go_router: ^16.2.0
+  data_table_2: ^2.6.0
+  fl_chart: ^1.0.0
+  intl: ^0.20.2
+  google_fonts: ^6.3.0
+  firebase_core: ^4.1.0
+  firebase_auth: ^6.0.2
+  cloud_firestore: ^6.0.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/data/
+    - assets/images/
+    - assets/images/products/

@@ -1,0 +1,68 @@
+rules_version = '2';
+
+// Who can do what:
+// - Buyers (trade customers) read the catalogue, read their own account and
+//   orders, and place orders for themselves.
+// - Staff (a document in admins/{uid}) read everything, change order status,
+//   and edit prices and availability.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    function onlyChanges(keys) {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(keys);
+    }
+
+    // Staff list. Written only by the seed script (Admin SDK).
+    match /admins/{uid} {
+      allow read: if signedIn() && request.auth.uid == uid;
+      allow write: if false;
+    }
+
+    match /products/{productId} {
+      allow read: if signedIn();
+      allow create, delete: if isAdmin();
+      // Staff edit anything; a buyer's order may only lower the stock.
+      allow update: if isAdmin()
+        || (signedIn()
+            && onlyChanges(['stock'])
+            && request.resource.data.stock < resource.data.stock
+            && request.resource.data.stock >= 0);
+    }
+
+    // The document id is the buyer's Firebase uid.
+    match /customers/{customerId} {
+      allow read: if isAdmin() || (signedIn() && request.auth.uid == customerId);
+      allow create, delete: if isAdmin();
+      // An order may only add to the buyer's own balance.
+      allow update: if isAdmin()
+        || (signedIn()
+            && request.auth.uid == customerId
+            && onlyChanges(['balance'])
+            && request.resource.data.balance > resource.data.balance);
+    }
+
+    match /orders/{orderId} {
+      allow read: if isAdmin() || (signedIn() && resource.data.customerId == request.auth.uid);
+      allow create: if signedIn()
+        && request.resource.data.customerId == request.auth.uid
+        && request.resource.data.status == 'placed';
+      // Only staff move an order on, and only its status.
+      allow update: if isAdmin() && onlyChanges(['status']);
+      allow delete: if false;
+    }
+
+    // Order numbers (HM-20556, HM-20557...). Each order adds exactly one.
+    match /meta/counters {
+      allow read: if signedIn();
+      allow update: if signedIn() && request.resource.data.lastOrderNo == resource.data.lastOrderNo + 1;
+    }
+  }
+}

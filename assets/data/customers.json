@@ -1,0 +1,67 @@
+[
+  {
+    "id": "c001",
+    "accountNo": "TA-4102",
+    "companyName": "Pennine Build & Renovate Ltd",
+    "contactName": "Gareth Lowe",
+    "email": "orders@penninebuild.example",
+    "phone": "0113 496 0102",
+    "address": "Unit 4, Canal Wharf, Leeds LS11 5PS",
+    "paymentTerms": "30 days end of month",
+    "creditLimit": 15000,
+    "balance": 6240.18,
+    "discountPct": 5
+  },
+  {
+    "id": "c002",
+    "accountNo": "TA-4117",
+    "companyName": "Ashworth Plumbing Services",
+    "contactName": "Nadia Ashworth",
+    "email": "nadia@ashworthplumbing.example",
+    "phone": "0161 496 0177",
+    "address": "12 Mill Street, Oldham OL1 3HE",
+    "paymentTerms": "30 days end of month",
+    "creditLimit": 8000,
+    "balance": 2195.4,
+    "discountPct": 3
+  },
+  {
+    "id": "c003",
+    "accountNo": "TA-4125",
+    "companyName": "Kerr Electrical Contractors",
+    "contactName": "Callum Kerr",
+    "email": "accounts@kerrelectrical.example",
+    "phone": "0141 496 0125",
+    "address": "88 Govan Road, Glasgow G51 1HX",
+    "paymentTerms": "30 days",
+    "creditLimit": 10000,
+    "balance": 4870.0,
+    "discountPct": 4
+  },
+  {
+    "id": "c004",
+    "accountNo": "TA-4133",
+    "companyName": "Hillside Joinery",
+    "contactName": "Tom Bradley",
+    "email": "tom@hillsidejoinery.example",
+    "phone": "01274 496 133",
+    "address": "Old Station Yard, Bradford BD5 8AA",
+    "paymentTerms": "14 days",
+    "creditLimit": 5000,
+    "balance": 980.65,
+    "discountPct": 2
+  },
+  {
+    "id": "c005",
+    "accountNo": "TA-4140",
+    "companyName": "Seaview Property Maintenance",
+    "contactName": "Priya Desai",
+    "email": "priya@seaviewpm.example",
+    "phone": "01253 496 140",
+    "address": "3 Promenade Mews, Blackpool FY1 2HB",
+    "paymentTerms": "30 days end of month",
+    "creditLimit": 6000,
+    "balance": 0.0,
+    "discountPct": 0
+  }
+]

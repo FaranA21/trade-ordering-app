@@ -1,0 +1,11 @@
+{
+  "name": "merchant-demo-seed",
+  "private": true,
+  "description": "Loads the merchant demo data and sign-ins into Firebase.",
+  "scripts": {
+    "seed": "node seed.js"
+  },
+  "dependencies": {
+    "firebase-admin": "^13.0.0"
+  }
+}

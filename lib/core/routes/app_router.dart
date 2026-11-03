@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -39,29 +40,30 @@ class Routes {
   static String adminOrdersWithStatus(String statusKey) => '/admin/orders?status=$statusKey';
 }
 
+/// One codebase, two products:
+/// - Android and iOS run the buyer app only.
+/// - Web runs the admin panel only.
+/// Each platform registers only its own routes, so the other side cannot be
+/// reached by typing a URL.
 class AppRouter {
   AppRouter._();
 
   static final _rootKey = GlobalKey<NavigatorState>();
 
   static GoRouter create(AuthViewModel auth) {
+    return kIsWeb ? _admin(auth) : _buyer(auth);
+  }
+
+  static GoRouter _buyer(AuthViewModel auth) {
     return GoRouter(
       navigatorKey: _rootKey,
       initialLocation: Routes.login,
       refreshListenable: _StreamListenable(auth.stream),
       redirect: (context, state) {
         final path = state.matchedLocation;
-        final a = auth.state;
-
-        // Admin panel: staff only.
-        if (path.startsWith(Routes.admin)) {
-          if (path == Routes.adminLogin) return a.isAdmin ? Routes.admin : null;
-          return a.isAdmin ? null : Routes.adminLogin;
-        }
-
-        // Buyer app: a signed-in trade customer only.
-        if (!a.signedIn && path != Routes.login) return Routes.login;
-        if (a.signedIn && path == Routes.login) return Routes.shop;
+        final signedIn = auth.state.signedIn;
+        if (!signedIn && path != Routes.login) return Routes.login;
+        if (signedIn && path == Routes.login) return Routes.shop;
         return null;
       },
       routes: [
@@ -99,10 +101,29 @@ class AppRouter {
           parentNavigatorKey: _rootKey,
           builder: (_, state) => OrderDetailView(orderId: state.pathParameters['id']!),
         ),
+      ],
+    );
+  }
 
+  static GoRouter _admin(AuthViewModel auth) {
+    return GoRouter(
+      navigatorKey: _rootKey,
+      initialLocation: Routes.admin,
+      refreshListenable: _StreamListenable(auth.stream),
+      redirect: (context, state) {
+        final path = state.matchedLocation;
+        final isAdmin = auth.state.isAdmin;
+        // Anything outside /admin (e.g. the bare site link) goes to the panel.
+        if (!path.startsWith(Routes.admin)) return isAdmin ? Routes.admin : Routes.adminLogin;
+        if (path == Routes.adminLogin) return isAdmin ? Routes.admin : null;
+        return isAdmin ? null : Routes.adminLogin;
+      },
+      errorBuilder: (_, __) => const AdminLoginView(),
+      routes: [
+        GoRoute(path: '/', redirect: (_, __) => Routes.admin),
         GoRoute(path: Routes.adminLogin, builder: (_, __) => const AdminLoginView()),
 
-        // Admin panel: side menu on wide screens, drawer on narrow ones.
+        // Side menu on wide screens, drawer on narrow ones.
         ShellRoute(
           builder: (_, state, child) => AdminShellView(location: state.uri.path, child: child),
           routes: [

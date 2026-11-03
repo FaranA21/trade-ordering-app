@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -52,7 +53,7 @@ class _MerchantDemoAppState extends State<MerchantDemoApp> {
           BlocProvider(create: (_) => AdminCustomersViewModel(widget.repository)),
         ],
         child: MaterialApp.router(
-          title: '${BrandConfig.companyName} Trade',
+          title: kIsWeb ? '${BrandConfig.companyName} Admin' : '${BrandConfig.companyName} Trade',
           debugShowCheckedModeBanner: false,
           theme: AppTheme.light,
           routerConfig: _router,

@@ -20,7 +20,17 @@ class BrandMark extends StatelessWidget {
         color: AppColors.highlight,
         borderRadius: BorderRadius.circular(size * 0.23),
       ),
-      child: Text(BrandConfig.initials, style: AppTheme.price(size: size * 0.45, color: AppColors.ink)),
+      padding: EdgeInsets.symmetric(horizontal: size * 0.14),
+      // FittedBox keeps the initials on one line at any size ("H&M" used to wrap).
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Text(
+          BrandConfig.initials,
+          maxLines: 1,
+          softWrap: false,
+          style: AppTheme.price(size: size * 0.36, color: AppColors.ink).copyWith(letterSpacing: -0.5, height: 1),
+        ),
+      ),
     );
   }
 }
